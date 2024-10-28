@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.GoodsDAO">
+	<resultMap type="goods" id="goodsMap">
+		<id property="goodsid" column="goodsid" />
+		<result property="goodsno" column="goodsno" />
+		<result property="goodsname" column="goodsname" />
+		<result property="cateid" column="cateid" />
+		<result property="image" column="image" />
+		<result property="price" column="price" />
+		<result property="num" column="num" />
+		<result property="birthday" column="birthday" />
+		<result property="place" column="place" />
+		<result property="memo" column="memo" />
+		<result property="catename" column="catename" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertGoods" parameterType="goods">  
+		insert into goods(goodsid  , goodsno  , goodsname  , cateid  , image  , price  , num  , birthday  , place  , memo ) values(#{goodsid}  , #{goodsno}   , #{goodsname}   , #{cateid}   , #{image}   , #{price}   , #{num}   , #{birthday}   , #{place}   , #{memo} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+		<update id="updateGoods" parameterType="goods">
+update goods set  goodsno=#{goodsno}  , goodsname=#{goodsname}  , cateid=#{cateid}  , image=#{image}  , price=#{price}  , num=#{num}  , birthday=#{birthday}  , place=#{place}  , memo=#{memo}  where goodsid=#{goodsid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteGoods" parameterType="String">
+		delete from goods where goodsid = #{goodsid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置  -->
+	<select id="getAllGoods" resultMap="goodsMap">
+select a.* , b.catename  from goods a , cate b  where 1=1 and a.cateid = b.cateid  order by goodsid desc
+	</select>
+
+	<!-- 根据商品编号倒序查询显示最新上架  -->
+	<select id="getGoodsByNews" resultMap="goodsMap">
+		select a.* , b.catename from goods a , cate b where a.cateid = b.cateid
+		order by goodsid desc limit 5
+	</select>
+
+	<!-- 根据商品点击数倒序查询热门商品  -->
+	<select id="getGoodsByHot" resultMap="goodsMap">
+		select a.* , b.catename from goods a , cate b where a.cateid = b.cateid
+		order by hits desc limit 5
+	</select>
+
+	<!-- 根据商品类型查询N个商品信息 首页显示  -->
+	<select id="getGoodsByCate" parameterType="String" resultMap="goodsMap">
+		select a.* , b.catename from goods a , cate b where a.cateid = b.cateid
+		and a.cateid=#{cateid} order by hits desc limit 5
+	</select>
+
+	<!-- 按主键查询 DAO通过id调用此配置  -->
+	<select id="getGoodsById" parameterType="String" resultMap="goodsMap">
+select a.* , b.catename  from goods a , cate b  where 1=1 and a.cateid = b.cateid and goodsid=#{goodsid} order by goodsid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置  -->
+	<select id="getGoodsByCond" parameterType="goods" resultMap="goodsMap">
+select a.* , b.catename  from goods a , cate b  where 1=1 and a.cateid = b.cateid 
+		<if test="goodsno != null and '' != goodsno">
+			and a.goodsno = #{goodsno}  
+		</if>
+		<if test="goodsname != null and '' != goodsname">
+			and a.goodsname = #{goodsname}  
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and a.cateid = #{cateid}  
+		</if>
+		<if test="image != null and '' != image">
+			and a.image = #{image}  
+		</if>
+		<if test="price != null and '' != price">
+			and a.price = #{price}  
+		</if>
+		<if test="num != null and '' != num">
+			and a.num = #{num}  
+		</if>
+		<if test="birthday != null and '' != birthday">
+			and a.birthday = #{birthday}  
+		</if>
+		<if test="place != null and '' != place">
+			and a.place = #{place}  
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo = #{memo}  
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置  -->
+	<select id="getGoodsByLike" parameterType="goods" resultMap="goodsMap">
+select a.* , b.catename  from goods a , cate b  where 1=1 and a.cateid = b.cateid 
+		<if test="goodsno != null and '' != goodsno">
+			and a.goodsno like CONCAT('%', CONCAT(#{goodsno}, '%'))
+		</if>
+		<if test="goodsname != null and '' != goodsname">
+			and a.goodsname like CONCAT('%', CONCAT(#{goodsname}, '%'))
+		</if>
+		<if test="cateid != null and '' != cateid">
+			and b.catename like CONCAT('%', CONCAT(#{cateid}, '%'))
+		</if>
+		<if test="image != null and '' != image">
+			and a.image like CONCAT('%', CONCAT(#{image}, '%'))
+		</if>
+		<if test="price != null and '' != price">
+			and a.price like CONCAT('%', CONCAT(#{price}, '%'))
+		</if>
+		<if test="num != null and '' != num">
+			and a.num like CONCAT('%', CONCAT(#{num}, '%'))
+		</if>
+		<if test="birthday != null and '' != birthday">
+			and a.birthday like CONCAT('%', CONCAT(#{birthday}, '%'))
+		</if>
+		<if test="place != null and '' != place">
+			and a.place like CONCAT('%', CONCAT(#{place}, '%'))
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

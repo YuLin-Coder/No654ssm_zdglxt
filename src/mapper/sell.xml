@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置Mabatis映射文件 -->
+<mapper namespace="com.dao.SellDAO">
+	<resultMap type="sell" id="sellMap">
+		<id property="sellid" column="sellid" />
+		<result property="sno" column="sno" />
+		<result property="employid" column="employid" />
+		<result property="customername" column="customername" />
+		<result property="total" column="total" />
+		<result property="addtime" column="addtime" />
+		<result property="status" column="status" />
+		<result property="memo" column="memo" />
+		<result property="employname" column="employname" />
+	</resultMap>
+	<!-- 插入语句 DAO通过id调用此配置 -->
+	<insert id="insertSell" parameterType="sell">  
+		insert into sell(sellid  , sno  , employid  , customername  , total  , addtime  , status  , memo ) values(#{sellid}  , #{sno}   , #{employid}   , #{customername}   , #{total}   , #{addtime}   , #{status}   , #{memo} )
+	</insert>
+	<!-- 更新语句 DAO通过id调用此配置 -->
+		<update id="updateSell" parameterType="sell">
+update sell set  sno=#{sno}  , employid=#{employid}  , customername=#{customername}  , total=#{total}  , addtime=#{addtime}  , status=#{status}  , memo=#{memo}  where sellid=#{sellid}
+	</update>
+	<!-- 按主键删除 DAO通过id调用此配置 -->
+	<delete id="deleteSell" parameterType="String">
+		delete from sell where sellid = #{sellid}
+	</delete>
+	<!-- 查询全部信息 DAO通过id调用此配置  -->
+	<select id="getAllSell" resultMap="sellMap">
+select a.* , b.employname  from sell a , employ b  where 1=1 and a.employid = b.employid  order by sellid desc
+	</select>
+
+	<!-- 按主键查询 DAO通过id调用此配置  -->
+	<select id="getSellById" parameterType="String" resultMap="sellMap">
+select a.* , b.employname  from sell a , employ b  where 1=1 and a.employid = b.employid and sellid=#{sellid} order by sellid desc
+	</select>
+	<!-- 按条件精确查询 DAO通过id调用此配置  -->
+	<select id="getSellByCond" parameterType="sell" resultMap="sellMap">
+select a.* , b.employname  from sell a , employ b  where 1=1 and a.employid = b.employid 
+		<if test="sno != null and '' != sno">
+			and a.sno = #{sno}  
+		</if>
+		<if test="employid != null and '' != employid">
+			and a.employid = #{employid}  
+		</if>
+		<if test="customername != null and '' != customername">
+			and a.customername = #{customername}  
+		</if>
+		<if test="total != null and '' != total">
+			and a.total = #{total}  
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime = #{addtime}  
+		</if>
+		<if test="status != null and '' != status">
+			and a.status = #{status}  
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo = #{memo}  
+		</if>
+	</select>
+	<!-- 按条件模糊查询 DAO通过id调用此配置  -->
+	<select id="getSellByLike" parameterType="sell" resultMap="sellMap">
+select a.* , b.employname  from sell a , employ b  where 1=1 and a.employid = b.employid 
+		<if test="sno != null and '' != sno">
+			and a.sno like CONCAT('%', CONCAT(#{sno}, '%'))
+		</if>
+		<if test="employid != null and '' != employid">
+			and b.employname like CONCAT('%', CONCAT(#{employid}, '%'))
+		</if>
+		<if test="customername != null and '' != customername">
+			and a.customername like CONCAT('%', CONCAT(#{customername}, '%'))
+		</if>
+		<if test="total != null and '' != total">
+			and a.total like CONCAT('%', CONCAT(#{total}, '%'))
+		</if>
+		<if test="addtime != null and '' != addtime">
+			and a.addtime like CONCAT('%', CONCAT(#{addtime}, '%'))
+		</if>
+		<if test="status != null and '' != status">
+			and a.status like CONCAT('%', CONCAT(#{status}, '%'))
+		</if>
+		<if test="memo != null and '' != memo">
+			and a.memo like CONCAT('%', CONCAT(#{memo}, '%'))
+		</if>
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
